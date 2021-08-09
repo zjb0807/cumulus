@@ -1,3 +1,0 @@
-(function() {var implementors = {};
-implementors["statemine_runtime"] = [{"text":"impl Filter&lt;<a class=\"enum\" href=\"statemine_runtime/enum.Call.html\" title=\"enum statemine_runtime::Call\">Call</a>&gt; for <a class=\"struct\" href=\"statemine_runtime/struct.BaseFilter.html\" title=\"struct statemine_runtime::BaseFilter\">BaseFilter</a>","synthetic":false,"types":["statemine_runtime::BaseFilter"]}];
-if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
