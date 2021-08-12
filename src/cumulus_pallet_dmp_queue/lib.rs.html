@@ -819,7 +819,7 @@
 <span class="kw">use</span> <span class="ident">cumulus_primitives_core::DmpMessageHandler</span>;
 <span class="kw">use</span> <span class="ident">codec</span>::{<span class="ident">Encode</span>, <span class="ident">Decode</span>};
 <span class="kw">use</span> <span class="ident">sp_runtime::RuntimeDebug</span>;
-<span class="kw">use</span> <span class="ident">xcm</span>::{<span class="ident">VersionedXcm</span>, <span class="ident">latest</span>::{<span class="ident">Xcm</span>, <span class="ident">Junction</span>, <span class="ident">Outcome</span>, <span class="ident">ExecuteXcm</span>, <span class="ident">Error</span> <span class="kw">as</span> <span class="ident">XcmError</span>}};
+<span class="kw">use</span> <span class="ident">xcm</span>::{<span class="ident">VersionedXcm</span>, <span class="ident">latest</span>::{<span class="ident">Xcm</span>, <span class="ident">Outcome</span>, <span class="ident">Parent</span>, <span class="ident">ExecuteXcm</span>, <span class="ident">Error</span> <span class="kw">as</span> <span class="ident">XcmError</span>}};
 <span class="kw">use</span> <span class="ident">frame_support</span>::{<span class="ident">traits::EnsureOrigin</span>, <span class="ident">dispatch::Weight</span>, <span class="ident">weights::constants::WEIGHT_PER_MILLIS</span>};
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">pallet</span>::<span class="kw-2">*</span>;
 
@@ -1038,7 +1038,7 @@
 					<span class="prelude-val">Ok</span>(<span class="number">0</span>)
 				},
 				<span class="prelude-val">Ok</span>(<span class="prelude-val">Ok</span>(<span class="ident">x</span>)) <span class="op">=</span><span class="op">&gt;</span> {
-					<span class="kw">let</span> <span class="ident">outcome</span> <span class="op">=</span> <span class="ident">T::XcmExecutor::execute_xcm</span>(<span class="ident">Junction::Parent</span>.<span class="ident">into</span>(), <span class="ident">x</span>, <span class="ident">limit</span>);
+					<span class="kw">let</span> <span class="ident">outcome</span> <span class="op">=</span> <span class="ident">T::XcmExecutor::execute_xcm</span>(<span class="ident">Parent</span>.<span class="ident">into</span>(), <span class="ident">x</span>, <span class="ident">limit</span>);
 					<span class="kw">match</span> <span class="ident">outcome</span> {
 						<span class="ident">Outcome::Error</span>(<span class="ident">XcmError::WeightLimitReached</span>(<span class="ident">required</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>((<span class="ident">id</span>, <span class="ident">required</span>)),
 						<span class="ident">outcome</span> <span class="op">=</span><span class="op">&gt;</span> {

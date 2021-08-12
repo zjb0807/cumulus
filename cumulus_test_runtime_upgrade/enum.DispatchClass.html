@@ -13,8 +13,9 @@
 </div><div id="variant.Operational" class="variant small-section-header"><a href="#variant.Operational" class="anchor field"></a><code>Operational</code></div><div class="docblock"><p>An operational dispatch.</p>
 </div><div id="variant.Mandatory" class="variant small-section-header"><a href="#variant.Mandatory" class="anchor field"></a><code>Mandatory</code></div><div class="docblock"><p>A mandatory dispatch. These kinds of dispatch are always included regardless of their
 weight, therefore it is critical that they are separately validated to ensure that a
-malicious validator cannot craft a valid but impossibly heavy block. Usually this just means
-ensuring that the extrinsic can only be included once and that it is always very light.</p>
+malicious validator cannot craft a valid but impossibly heavy block. Usually this just
+means ensuring that the extrinsic can only be included once and that it is always very
+light.</p>
 <p>Do <em>NOT</em> use it for extrinsics that can be heavy.</p>
 <p>The only real use case for this is inherent extrinsics that are required to execute in a
 block for the block to be valid, and it solves the issue in the case that the block
