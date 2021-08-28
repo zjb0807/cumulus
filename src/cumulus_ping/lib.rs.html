@@ -215,11 +215,11 @@
 <span class="attribute">#![<span class="ident">cfg_attr</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>), <span class="ident">no_std</span>)]</span>
 
 <span class="kw">use</span> <span class="ident">sp_std::prelude</span>::<span class="kw-2">*</span>;
+<span class="kw">use</span> <span class="ident">xcm::latest::prelude</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="ident">sp_runtime::traits::Saturating</span>;
 <span class="kw">use</span> <span class="ident">frame_system::Config</span> <span class="kw">as</span> <span class="ident">SystemConfig</span>;
 <span class="kw">use</span> <span class="ident">cumulus_primitives_core::ParaId</span>;
 <span class="kw">use</span> <span class="ident">cumulus_pallet_xcm</span>::{<span class="ident">Origin</span> <span class="kw">as</span> <span class="ident">CumulusOrigin</span>, <span class="ident">ensure_sibling_para</span>};
-<span class="kw">use</span> <span class="ident">xcm::latest</span>::{<span class="ident">Xcm</span>, <span class="ident">Error</span> <span class="kw">as</span> <span class="ident">XcmError</span>, <span class="ident">SendXcm</span>, <span class="ident">OriginKind</span>, <span class="ident">Junction</span>};
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">pallet</span>::<span class="kw-2">*</span>;
 
@@ -281,8 +281,8 @@
 		<span class="ident">Pinged</span>(<span class="ident">ParaId</span>, <span class="ident">u32</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>),
 		<span class="ident">PongSent</span>(<span class="ident">ParaId</span>, <span class="ident">u32</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>),
 		<span class="ident">Ponged</span>(<span class="ident">ParaId</span>, <span class="ident">u32</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">T::BlockNumber</span>),
-		<span class="ident">ErrorSendingPing</span>(<span class="ident">XcmError</span>, <span class="ident">ParaId</span>, <span class="ident">u32</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>),
-		<span class="ident">ErrorSendingPong</span>(<span class="ident">XcmError</span>, <span class="ident">ParaId</span>, <span class="ident">u32</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>),
+		<span class="ident">ErrorSendingPing</span>(<span class="ident">SendError</span>, <span class="ident">ParaId</span>, <span class="ident">u32</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>),
+		<span class="ident">ErrorSendingPong</span>(<span class="ident">SendError</span>, <span class="ident">ParaId</span>, <span class="ident">u32</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>),
 		<span class="ident">UnknownPong</span>(<span class="ident">ParaId</span>, <span class="ident">u32</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>),
 	}
 
@@ -298,11 +298,11 @@
 				<span class="kw">let</span> <span class="ident">seq</span> <span class="op">=</span> <span class="ident">PingCount</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="ident">::mutate</span>(<span class="op">|</span><span class="ident">seq</span><span class="op">|</span> { <span class="kw-2">*</span><span class="ident">seq</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>; <span class="kw-2">*</span><span class="ident">seq</span> });
 				<span class="kw">match</span> <span class="ident">T::XcmSender::send_xcm</span>(
 					(<span class="number">1</span>, <span class="ident">Junction::Parachain</span>(<span class="ident">para</span>.<span class="ident">into</span>())).<span class="ident">into</span>(),
-					<span class="ident">Xcm::Transact</span> {
+					<span class="ident">Xcm</span>(<span class="macro">vec!</span>[<span class="ident">Transact</span> {
 						<span class="ident">origin_type</span>: <span class="ident">OriginKind::Native</span>,
 						<span class="ident">require_weight_at_most</span>: <span class="number">1_000</span>,
 						<span class="ident">call</span>: <span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">Config</span><span class="op">&gt;</span><span class="ident">::Call::from</span>(<span class="ident">Call</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="ident">::ping</span>(<span class="ident">seq</span>, <span class="ident">payload</span>.<span class="ident">clone</span>())).<span class="ident">encode</span>().<span class="ident">into</span>(),
-					},
+					}]),
 				) {
 					<span class="prelude-val">Ok</span>(()) <span class="op">=</span><span class="op">&gt;</span> {
 						<span class="ident">Pings</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="ident">::insert</span>(<span class="ident">seq</span>, <span class="ident">n</span>);
@@ -360,11 +360,11 @@
 			<span class="self">Self</span><span class="ident">::deposit_event</span>(<span class="ident">Event::Pinged</span>(<span class="ident">para</span>, <span class="ident">seq</span>, <span class="ident">payload</span>.<span class="ident">clone</span>()));
 			<span class="kw">match</span> <span class="ident">T::XcmSender::send_xcm</span>(
 				(<span class="number">1</span>, <span class="ident">Junction::Parachain</span>(<span class="ident">para</span>.<span class="ident">into</span>())).<span class="ident">into</span>(),
-				<span class="ident">Xcm::Transact</span> {
+				<span class="ident">Xcm</span>(<span class="macro">vec!</span>[<span class="ident">Transact</span> {
 					<span class="ident">origin_type</span>: <span class="ident">OriginKind::Native</span>,
 					<span class="ident">require_weight_at_most</span>: <span class="number">1_000</span>,
 					<span class="ident">call</span>: <span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">Config</span><span class="op">&gt;</span><span class="ident">::Call::from</span>(<span class="ident">Call</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="ident">::pong</span>(<span class="ident">seq</span>, <span class="ident">payload</span>.<span class="ident">clone</span>())).<span class="ident">encode</span>().<span class="ident">into</span>(),
-				},
+				}]),
 			) {
 				<span class="prelude-val">Ok</span>(()) <span class="op">=</span><span class="op">&gt;</span> <span class="self">Self</span><span class="ident">::deposit_event</span>(<span class="ident">Event::PongSent</span>(<span class="ident">para</span>, <span class="ident">seq</span>, <span class="ident">payload</span>)),
 				<span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">Self</span><span class="ident">::deposit_event</span>(<span class="ident">Event::ErrorSendingPong</span>(<span class="ident">e</span>, <span class="ident">para</span>, <span class="ident">seq</span>, <span class="ident">payload</span>)),
