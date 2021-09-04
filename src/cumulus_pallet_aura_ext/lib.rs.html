@@ -228,7 +228,7 @@
 	<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Config</span><span class="op">&gt;</span> <span class="ident">Hooks</span><span class="op">&lt;</span><span class="ident">BlockNumberFor</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Pallet</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
 		<span class="kw">fn</span> <span class="ident">on_finalize</span>(<span class="kw">_</span>: <span class="ident">BlockNumberFor</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) {
 			<span class="comment">// Update to the latest AuRa authorities.</span>
-			<span class="ident">Authorities</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="ident">::put</span>(<span class="ident">Aura</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="ident">::authorities</span>());
+			<span class="ident">Authorities</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="ident">::put</span>(<span class="ident">Aura</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="ident">::authorities</span>().<span class="ident">into_inner</span>());
 		}
 
 		<span class="kw">fn</span> <span class="ident">on_initialize</span>(<span class="kw">_</span>: <span class="ident">BlockNumberFor</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Weight</span> {
@@ -264,7 +264,7 @@
 				<span class="string">&quot;AuRa authorities empty, maybe wrong order in `construct_runtime!`?&quot;</span>,
 			);
 
-			<span class="ident">Authorities</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="ident">::put</span>(<span class="ident">authorities</span>);
+			<span class="ident">Authorities</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="ident">::put</span>(<span class="ident">authorities</span>.<span class="ident">into_inner</span>());
 		}
 	}
 }
