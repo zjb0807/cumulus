@@ -391,9 +391,6 @@
 <span id="391">391</span>
 <span id="392">392</span>
 <span id="393">393</span>
-<span id="394">394</span>
-<span id="395">395</span>
-<span id="396">396</span>
 </pre><pre class="rust">
 <span class="comment">// Copyright 2019-2021 Parity Technologies (UK) Ltd.</span>
 <span class="comment">// This file is part of Cumulus.</span>
@@ -472,10 +469,7 @@
 <span class="doccomment">/// The version information used to identify this runtime when compiled natively.</span>
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>)]</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">native_version</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">NativeVersion</span> {
-	<span class="ident">NativeVersion</span> {
-		<span class="ident">runtime_version</span>: <span class="ident">VERSION</span>,
-		<span class="ident">can_author_with</span>: <span class="ident">Default::default</span>(),
-	}
+	<span class="ident">NativeVersion</span> { <span class="ident">runtime_version</span>: <span class="ident">VERSION</span>, <span class="ident">can_author_with</span>: <span class="ident">Default::default</span>() }
 }
 
 <span class="doccomment">/// We assume that ~10% of the block weight is consumed by `on_initialize` handlers.</span>
