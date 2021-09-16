@@ -788,6 +788,9 @@
 <span id="788">788</span>
 <span id="789">789</span>
 <span id="790">790</span>
+<span id="791">791</span>
+<span id="792">792</span>
+<span id="793">793</span>
 </pre><pre class="rust">
 <span class="comment">// Copyright 2020-2021 Parity Technologies (UK) Ltd.</span>
 <span class="comment">// This file is part of Cumulus.</span>
@@ -812,6 +815,7 @@
 
 <span class="attribute">#![<span class="ident">cfg_attr</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>), <span class="ident">no_std</span>)]</span>
 
+<span class="kw">use</span> <span class="ident">scale_info::TypeInfo</span>;
 <span class="kw">use</span> <span class="ident">sp_std</span>::{<span class="ident">prelude</span>::<span class="kw-2">*</span>, <span class="ident">convert::TryFrom</span>};
 <span class="kw">use</span> <span class="ident">cumulus_primitives_core::relay_chain::BlockNumber</span> <span class="kw">as</span> <span class="ident">RelayBlockNumber</span>;
 <span class="kw">use</span> <span class="ident">cumulus_primitives_core::DmpMessageHandler</span>;
@@ -821,7 +825,7 @@
 <span class="kw">use</span> <span class="ident">frame_support</span>::{<span class="ident">traits::EnsureOrigin</span>, <span class="ident">dispatch::Weight</span>, <span class="ident">weights::constants::WEIGHT_PER_MILLIS</span>};
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">pallet</span>::<span class="kw-2">*</span>;
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Copy</span>, <span class="ident">Clone</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">Encode</span>, <span class="ident">Decode</span>, <span class="ident">RuntimeDebug</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Copy</span>, <span class="ident">Clone</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">Encode</span>, <span class="ident">Decode</span>, <span class="ident">RuntimeDebug</span>, <span class="ident">TypeInfo</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ConfigData</span> {
 	<span class="doccomment">/// The maximum amount of weight any individual message may consume. Messages above this weight</span>
 	<span class="doccomment">/// go into the overweight queue and may only be serviced explicitly by the</span>
@@ -838,7 +842,7 @@
 }
 
 <span class="doccomment">/// Information concerning our message pages.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Copy</span>, <span class="ident">Clone</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">Default</span>, <span class="ident">Encode</span>, <span class="ident">Decode</span>, <span class="ident">RuntimeDebug</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Copy</span>, <span class="ident">Clone</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">Default</span>, <span class="ident">Encode</span>, <span class="ident">Decode</span>, <span class="ident">RuntimeDebug</span>, <span class="ident">TypeInfo</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PageIndexData</span> {
 	<span class="doccomment">/// The lowest used page index.</span>
 	<span class="ident">begin_used</span>: <span class="ident">PageCounter</span>,
@@ -957,7 +961,6 @@
 
 	<span class="attribute">#[<span class="ident">pallet::event</span>]</span>
 	<span class="attribute">#[<span class="ident">pallet::generate_deposit</span>(<span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">deposit_event</span>)]</span>
-	<span class="attribute">#[<span class="ident">pallet::metadata</span>(<span class="ident">T::BlockNumber</span> <span class="op">=</span> <span class="string">&quot;BlockNumber&quot;</span>)]</span>
 	<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Event</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Config</span><span class="op">&gt;</span> {
 		<span class="doccomment">/// Downward message is invalid XCM.</span>
 		<span class="doccomment">/// \[ id \]</span>
@@ -1546,7 +1549,10 @@
 			<span class="macro">assert_noop!</span>(<span class="ident">DmpQueue::service_overweight</span>(<span class="ident">Origin::root</span>(), <span class="number">0</span>, <span class="number">9999</span>), <span class="ident">Error</span>::<span class="op">&lt;</span><span class="ident">Test</span><span class="op">&gt;</span><span class="ident">::OverLimit</span>);
 			<span class="macro">assert_eq!</span>(<span class="ident">take_trace</span>(), <span class="macro">vec!</span>[ <span class="ident">msg_limit_reached</span>(<span class="number">10000</span>) ]);
 
-			<span class="kw">let</span> <span class="ident">base_weight</span> <span class="op">=</span> <span class="kw">super</span><span class="ident">::Call</span>::<span class="op">&lt;</span><span class="ident">Test</span><span class="op">&gt;</span><span class="ident">::service_overweight</span>(<span class="number">0</span>, <span class="number">0</span>).<span class="ident">get_dispatch_info</span>().<span class="ident">weight</span>;
+			<span class="kw">let</span> <span class="ident">base_weight</span> <span class="op">=</span> <span class="kw">super</span><span class="ident">::Call</span>::<span class="op">&lt;</span><span class="ident">Test</span><span class="op">&gt;</span><span class="ident">::service_overweight</span> {
+				<span class="ident">index</span>: <span class="number">0</span>,
+				<span class="ident">weight_limit</span>: <span class="number">0</span>,
+			}.<span class="ident">get_dispatch_info</span>().<span class="ident">weight</span>;
 			<span class="kw">use</span> <span class="ident">frame_support::weights::GetDispatchInfo</span>;
 			<span class="kw">let</span> <span class="ident">info</span> <span class="op">=</span> <span class="ident">DmpQueue::service_overweight</span>(<span class="ident">Origin::root</span>(), <span class="number">0</span>, <span class="number">20000</span>).<span class="ident">unwrap</span>();
 			<span class="kw">let</span> <span class="ident">actual_weight</span> <span class="op">=</span> <span class="ident">info</span>.<span class="ident">actual_weight</span>.<span class="ident">unwrap</span>();

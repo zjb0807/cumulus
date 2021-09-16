@@ -228,6 +228,7 @@
 <span id="228">228</span>
 <span id="229">229</span>
 <span id="230">230</span>
+<span id="231">231</span>
 </pre><pre class="rust">
 <span class="comment">// Copyright 2021 Parity Technologies (UK) Ltd.</span>
 <span class="comment">// This file is part of Cumulus.</span>
@@ -249,6 +250,7 @@
 <span class="kw">use</span> <span class="ident">cumulus_primitives_core</span>::{
 	<span class="ident">relay_chain</span>, <span class="ident">AbridgedHostConfiguration</span>, <span class="ident">AbridgedHrmpChannel</span>, <span class="ident">ParaId</span>,
 };
+<span class="kw">use</span> <span class="ident">scale_info::TypeInfo</span>;
 <span class="kw">use</span> <span class="ident">sp_trie</span>::{<span class="ident">MemoryDB</span>, <span class="ident">HashDBT</span>, <span class="ident">EMPTY_PREFIX</span>};
 <span class="kw">use</span> <span class="ident">sp_runtime::traits::HashFor</span>;
 <span class="kw">use</span> <span class="ident">sp_state_machine</span>::{<span class="ident">Backend</span>, <span class="ident">TrieBackend</span>};
@@ -260,7 +262,7 @@
 <span class="doccomment">/// This data is essential for making sure that the parachain is aware of current resource use on</span>
 <span class="doccomment">/// the relay chain and that the candidates produced for this parachain do not exceed any of these</span>
 <span class="doccomment">/// limits.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Encode</span>, <span class="ident">Decode</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Encode</span>, <span class="ident">Decode</span>, <span class="ident">TypeInfo</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">MessagingStateSnapshot</span> {
 	<span class="doccomment">/// The current message queue chain head for downward message queue.</span>
 	<span class="doccomment">///</span>

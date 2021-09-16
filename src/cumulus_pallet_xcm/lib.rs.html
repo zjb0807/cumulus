@@ -207,6 +207,7 @@
 <span class="kw">use</span> <span class="ident">cumulus_primitives_core</span>::{<span class="ident">ParaId</span>, <span class="ident">DmpMessageHandler</span>};
 <span class="kw">use</span> <span class="ident">cumulus_primitives_core::relay_chain::BlockNumber</span> <span class="kw">as</span> <span class="ident">RelayBlockNumber</span>;
 <span class="kw">use</span> <span class="ident">codec</span>::{<span class="ident">Encode</span>, <span class="ident">Decode</span>};
+<span class="kw">use</span> <span class="ident">scale_info::TypeInfo</span>;
 <span class="kw">use</span> <span class="ident">sp_runtime::traits::BadOrigin</span>;
 <span class="kw">use</span> <span class="ident">xcm</span>::{<span class="ident">VersionedXcm</span>, <span class="ident">latest</span>::{<span class="ident">Xcm</span>, <span class="ident">Outcome</span>, <span class="ident">Parent</span>, <span class="ident">ExecuteXcm</span>}};
 <span class="kw">use</span> <span class="ident">frame_support::dispatch::Weight</span>;
@@ -243,7 +244,6 @@
 
 	<span class="attribute">#[<span class="ident">pallet::event</span>]</span>
 	<span class="attribute">#[<span class="ident">pallet::generate_deposit</span>(<span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">deposit_event</span>)]</span>
-	<span class="attribute">#[<span class="ident">pallet::metadata</span>(<span class="ident">T::BlockNumber</span> <span class="op">=</span> <span class="string">&quot;BlockNumber&quot;</span>)]</span>
 	<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Event</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Config</span><span class="op">&gt;</span> {
 		<span class="doccomment">/// Downward message is invalid XCM.</span>
 		<span class="doccomment">/// \[ id \]</span>
@@ -257,7 +257,7 @@
 	}
 
 	<span class="doccomment">/// Origin for the parachains module.</span>
-	<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Clone</span>, <span class="ident">Encode</span>, <span class="ident">Decode</span>)]</span>
+	<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Clone</span>, <span class="ident">Encode</span>, <span class="ident">Decode</span>, <span class="ident">TypeInfo</span>)]</span>
 	<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>, <span class="ident">derive</span>(<span class="ident">Debug</span>))]</span>
 	<span class="attribute">#[<span class="ident">pallet::origin</span>]</span>
 	<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Origin</span> {

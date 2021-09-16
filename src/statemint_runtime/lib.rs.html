@@ -933,6 +933,10 @@
 <span id="933">933</span>
 <span id="934">934</span>
 <span id="935">935</span>
+<span id="936">936</span>
+<span id="937">937</span>
+<span id="938">938</span>
+<span id="939">939</span>
 </pre><pre class="rust">
 <span class="comment">// Copyright (C) 2021 Parity Technologies (UK) Ltd.</span>
 <span class="comment">// SPDX-License-Identifier: Apache-2.0</span>
@@ -1224,6 +1228,7 @@
 <span class="doccomment">/// The type used to represent the kinds of proxying allowed.</span>
 <span class="attribute">#[<span class="ident">derive</span>(
 	<span class="ident">Copy</span>, <span class="ident">Clone</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">Ord</span>, <span class="ident">PartialOrd</span>, <span class="ident">Encode</span>, <span class="ident">Decode</span>, <span class="ident">RuntimeDebug</span>, <span class="ident">MaxEncodedLen</span>,
+	<span class="ident">scale_info::TypeInfo</span>,
 )]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ProxyType</span> {
 	<span class="doccomment">/// Fully permissioned proxy. Can execute any call on behalf of _proxied_.</span>
@@ -1251,58 +1256,61 @@
 		<span class="kw">match</span> <span class="self">self</span> {
 			<span class="ident">ProxyType::Any</span> <span class="op">=</span><span class="op">&gt;</span> <span class="bool-val">true</span>,
 			<span class="ident">ProxyType::NonTransfer</span> <span class="op">=</span><span class="op">&gt;</span> {
-				<span class="op">!</span><span class="macro">matches!</span>(<span class="ident">c</span>, <span class="ident">Call::Balances</span>(..) <span class="op">|</span> <span class="ident">Call::Assets</span>(..) <span class="op">|</span> <span class="ident">Call::Uniques</span>(..))
+				<span class="op">!</span><span class="macro">matches!</span>(<span class="ident">c</span>, <span class="ident">Call::Balances</span> { .. } <span class="op">|</span> <span class="ident">Call::Assets</span> { .. } <span class="op">|</span> <span class="ident">Call::Uniques</span> { .. })
 			}
 			<span class="ident">ProxyType::CancelProxy</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">matches!</span>(
 				<span class="ident">c</span>,
-				<span class="ident">Call::Proxy</span>(<span class="ident">pallet_proxy::Call::reject_announcement</span>(..))
-					<span class="op">|</span> <span class="ident">Call::Utility</span>(..) <span class="op">|</span> <span class="ident">Call::Multisig</span>(..)
+				<span class="ident">Call::Proxy</span>(<span class="ident">pallet_proxy::Call::reject_announcement</span> { .. })
+					<span class="op">|</span> <span class="ident">Call::Utility</span> { .. } <span class="op">|</span> <span class="ident">Call::Multisig</span> { .. }
 			),
 			<span class="ident">ProxyType::Assets</span> <span class="op">=</span><span class="op">&gt;</span> {
 				<span class="macro">matches!</span>(
 					<span class="ident">c</span>,
-					<span class="ident">Call::Assets</span>(..) <span class="op">|</span> <span class="ident">Call::Utility</span>(..) <span class="op">|</span> <span class="ident">Call::Multisig</span>(..) <span class="op">|</span> <span class="ident">Call::Uniques</span>(..)
+					<span class="ident">Call::Assets</span> { .. }
+						<span class="op">|</span> <span class="ident">Call::Utility</span> { .. }
+						<span class="op">|</span> <span class="ident">Call::Multisig</span> { .. }
+						<span class="op">|</span> <span class="ident">Call::Uniques</span> { .. }
 				)
 			}
 			<span class="ident">ProxyType::AssetOwner</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">matches!</span>(
 				<span class="ident">c</span>,
-				<span class="ident">Call::Assets</span>(<span class="ident">pallet_assets::Call::create</span>(..))
-					<span class="op">|</span> <span class="ident">Call::Assets</span>(<span class="ident">pallet_assets::Call::destroy</span>(..))
-					<span class="op">|</span> <span class="ident">Call::Assets</span>(<span class="ident">pallet_assets::Call::transfer_ownership</span>(..))
-					<span class="op">|</span> <span class="ident">Call::Assets</span>(<span class="ident">pallet_assets::Call::set_team</span>(..))
-					<span class="op">|</span> <span class="ident">Call::Assets</span>(<span class="ident">pallet_assets::Call::set_metadata</span>(..))
-					<span class="op">|</span> <span class="ident">Call::Assets</span>(<span class="ident">pallet_assets::Call::clear_metadata</span>(..))
-					<span class="op">|</span> <span class="ident">Call::Uniques</span>(<span class="ident">pallet_uniques::Call::create</span>(..))
-					<span class="op">|</span> <span class="ident">Call::Uniques</span>(<span class="ident">pallet_uniques::Call::destroy</span>(..))
-					<span class="op">|</span> <span class="ident">Call::Uniques</span>(<span class="ident">pallet_uniques::Call::transfer_ownership</span>(..))
-					<span class="op">|</span> <span class="ident">Call::Uniques</span>(<span class="ident">pallet_uniques::Call::set_team</span>(..))
-					<span class="op">|</span> <span class="ident">Call::Uniques</span>(<span class="ident">pallet_uniques::Call::set_metadata</span>(..))
-					<span class="op">|</span> <span class="ident">Call::Uniques</span>(<span class="ident">pallet_uniques::Call::set_attribute</span>(..))
-					<span class="op">|</span> <span class="ident">Call::Uniques</span>(<span class="ident">pallet_uniques::Call::set_class_metadata</span>(..))
-					<span class="op">|</span> <span class="ident">Call::Uniques</span>(<span class="ident">pallet_uniques::Call::clear_metadata</span>(..))
-					<span class="op">|</span> <span class="ident">Call::Uniques</span>(<span class="ident">pallet_uniques::Call::clear_attribute</span>(..))
-					<span class="op">|</span> <span class="ident">Call::Uniques</span>(<span class="ident">pallet_uniques::Call::clear_class_metadata</span>(..))
-					<span class="op">|</span> <span class="ident">Call::Utility</span>(..) <span class="op">|</span> <span class="ident">Call::Multisig</span>(..)
+				<span class="ident">Call::Assets</span>(<span class="ident">pallet_assets::Call::create</span> { .. })
+					<span class="op">|</span> <span class="ident">Call::Assets</span>(<span class="ident">pallet_assets::Call::destroy</span> { .. })
+					<span class="op">|</span> <span class="ident">Call::Assets</span>(<span class="ident">pallet_assets::Call::transfer_ownership</span> { .. })
+					<span class="op">|</span> <span class="ident">Call::Assets</span>(<span class="ident">pallet_assets::Call::set_team</span> { .. })
+					<span class="op">|</span> <span class="ident">Call::Assets</span>(<span class="ident">pallet_assets::Call::set_metadata</span> { .. })
+					<span class="op">|</span> <span class="ident">Call::Assets</span>(<span class="ident">pallet_assets::Call::clear_metadata</span> { .. })
+					<span class="op">|</span> <span class="ident">Call::Uniques</span>(<span class="ident">pallet_uniques::Call::create</span> { .. })
+					<span class="op">|</span> <span class="ident">Call::Uniques</span>(<span class="ident">pallet_uniques::Call::destroy</span> { .. })
+					<span class="op">|</span> <span class="ident">Call::Uniques</span>(<span class="ident">pallet_uniques::Call::transfer_ownership</span> { .. })
+					<span class="op">|</span> <span class="ident">Call::Uniques</span>(<span class="ident">pallet_uniques::Call::set_team</span> { .. })
+					<span class="op">|</span> <span class="ident">Call::Uniques</span>(<span class="ident">pallet_uniques::Call::set_metadata</span> { .. })
+					<span class="op">|</span> <span class="ident">Call::Uniques</span>(<span class="ident">pallet_uniques::Call::set_attribute</span> { .. })
+					<span class="op">|</span> <span class="ident">Call::Uniques</span>(<span class="ident">pallet_uniques::Call::set_class_metadata</span> { .. })
+					<span class="op">|</span> <span class="ident">Call::Uniques</span>(<span class="ident">pallet_uniques::Call::clear_metadata</span> { .. })
+					<span class="op">|</span> <span class="ident">Call::Uniques</span>(<span class="ident">pallet_uniques::Call::clear_attribute</span> { .. })
+					<span class="op">|</span> <span class="ident">Call::Uniques</span>(<span class="ident">pallet_uniques::Call::clear_class_metadata</span> { .. })
+					<span class="op">|</span> <span class="ident">Call::Utility</span> { .. } <span class="op">|</span> <span class="ident">Call::Multisig</span> { .. }
 			),
 			<span class="ident">ProxyType::AssetManager</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">matches!</span>(
 				<span class="ident">c</span>,
-				<span class="ident">Call::Assets</span>(<span class="ident">pallet_assets::Call::mint</span>(..))
-					<span class="op">|</span> <span class="ident">Call::Assets</span>(<span class="ident">pallet_assets::Call::burn</span>(..))
-					<span class="op">|</span> <span class="ident">Call::Assets</span>(<span class="ident">pallet_assets::Call::freeze</span>(..))
-					<span class="op">|</span> <span class="ident">Call::Assets</span>(<span class="ident">pallet_assets::Call::thaw</span>(..))
-					<span class="op">|</span> <span class="ident">Call::Assets</span>(<span class="ident">pallet_assets::Call::freeze_asset</span>(..))
-					<span class="op">|</span> <span class="ident">Call::Assets</span>(<span class="ident">pallet_assets::Call::thaw_asset</span>(..))
-					<span class="op">|</span> <span class="ident">Call::Uniques</span>(<span class="ident">pallet_uniques::Call::mint</span>(..))
-					<span class="op">|</span> <span class="ident">Call::Uniques</span>(<span class="ident">pallet_uniques::Call::burn</span>(..))
-					<span class="op">|</span> <span class="ident">Call::Uniques</span>(<span class="ident">pallet_uniques::Call::freeze</span>(..))
-					<span class="op">|</span> <span class="ident">Call::Uniques</span>(<span class="ident">pallet_uniques::Call::thaw</span>(..))
-					<span class="op">|</span> <span class="ident">Call::Uniques</span>(<span class="ident">pallet_uniques::Call::freeze_class</span>(..))
-					<span class="op">|</span> <span class="ident">Call::Uniques</span>(<span class="ident">pallet_uniques::Call::thaw_class</span>(..))
-					<span class="op">|</span> <span class="ident">Call::Utility</span>(..) <span class="op">|</span> <span class="ident">Call::Multisig</span>(..)
+				<span class="ident">Call::Assets</span>(<span class="ident">pallet_assets::Call::mint</span> { .. })
+					<span class="op">|</span> <span class="ident">Call::Assets</span>(<span class="ident">pallet_assets::Call::burn</span> { .. })
+					<span class="op">|</span> <span class="ident">Call::Assets</span>(<span class="ident">pallet_assets::Call::freeze</span> { .. })
+					<span class="op">|</span> <span class="ident">Call::Assets</span>(<span class="ident">pallet_assets::Call::thaw</span> { .. })
+					<span class="op">|</span> <span class="ident">Call::Assets</span>(<span class="ident">pallet_assets::Call::freeze_asset</span> { .. })
+					<span class="op">|</span> <span class="ident">Call::Assets</span>(<span class="ident">pallet_assets::Call::thaw_asset</span> { .. })
+					<span class="op">|</span> <span class="ident">Call::Uniques</span>(<span class="ident">pallet_uniques::Call::mint</span> { .. })
+					<span class="op">|</span> <span class="ident">Call::Uniques</span>(<span class="ident">pallet_uniques::Call::burn</span> { .. })
+					<span class="op">|</span> <span class="ident">Call::Uniques</span>(<span class="ident">pallet_uniques::Call::freeze</span> { .. })
+					<span class="op">|</span> <span class="ident">Call::Uniques</span>(<span class="ident">pallet_uniques::Call::thaw</span> { .. })
+					<span class="op">|</span> <span class="ident">Call::Uniques</span>(<span class="ident">pallet_uniques::Call::freeze_class</span> { .. })
+					<span class="op">|</span> <span class="ident">Call::Uniques</span>(<span class="ident">pallet_uniques::Call::thaw_class</span> { .. })
+					<span class="op">|</span> <span class="ident">Call::Utility</span> { .. } <span class="op">|</span> <span class="ident">Call::Multisig</span> { .. }
 			),
 			<span class="ident">ProxyType::Collator</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">matches!</span>(
 				<span class="ident">c</span>,
-				<span class="ident">Call::CollatorSelection</span>(..) <span class="op">|</span> <span class="ident">Call::Utility</span>(..) <span class="op">|</span> <span class="ident">Call::Multisig</span>(..)
+				<span class="ident">Call::CollatorSelection</span> { .. } <span class="op">|</span> <span class="ident">Call::Utility</span> { .. } <span class="op">|</span> <span class="ident">Call::Multisig</span> { .. }
 			),
 		}
 	}
@@ -1689,7 +1697,7 @@
 
 	<span class="kw">impl</span> <span class="ident">sp_api::Metadata</span><span class="op">&lt;</span><span class="ident">Block</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
 		<span class="kw">fn</span> <span class="ident">metadata</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">OpaqueMetadata</span> {
-			<span class="ident">Runtime::metadata</span>().<span class="ident">into</span>()
+			<span class="ident">OpaqueMetadata::new</span>(<span class="ident">Runtime::metadata</span>().<span class="ident">into</span>())
 		}
 	}
 

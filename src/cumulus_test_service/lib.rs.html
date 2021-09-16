@@ -759,6 +759,9 @@
 <span id="759">759</span>
 <span id="760">760</span>
 <span id="761">761</span>
+<span id="762">762</span>
+<span id="763">763</span>
+<span id="764">764</span>
 </pre><pre class="rust">
 <span class="comment">// Copyright 2019-2021 Parity Technologies (UK) Ltd.</span>
 <span class="comment">// This file is part of Cumulus.</span>
@@ -1153,7 +1156,7 @@
 	<span class="doccomment">/// Create a new instance of `Self`.</span>
 	<span class="doccomment">///</span>
 	<span class="doccomment">/// `para_id` - The parachain id this node is running for.</span>
-	<span class="doccomment">/// `task_executor` - The task executor to use.</span>
+	<span class="doccomment">/// `tokio_handle` - The tokio handler to use.</span>
 	<span class="doccomment">/// `key` - The key that will be used to generate the name and that will be passed as `dev_seed`.</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">para_id</span>: <span class="ident">ParaId</span>, <span class="ident">tokio_handle</span>: <span class="ident">tokio::runtime::Handle</span>, <span class="ident">key</span>: <span class="ident">Sr25519Keyring</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
 		<span class="ident">TestNodeBuilder</span> {
@@ -1444,10 +1447,13 @@
 
 	<span class="doccomment">/// Register a parachain at this relay chain.</span>
 	<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">schedule_upgrade</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">validation</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">RpcTransactionError</span><span class="op">&gt;</span> {
-		<span class="kw">let</span> <span class="ident">call</span> <span class="op">=</span> <span class="ident">frame_system::Call::set_code</span>(<span class="ident">validation</span>);
+		<span class="kw">let</span> <span class="ident">call</span> <span class="op">=</span> <span class="ident">frame_system::Call::set_code</span> { <span class="ident">code</span>: <span class="ident">validation</span> };
 
 		<span class="self">self</span>.<span class="ident">send_extrinsic</span>(
-			<span class="ident">runtime::SudoCall::sudo_unchecked_weight</span>(<span class="ident">Box::new</span>(<span class="ident">call</span>.<span class="ident">into</span>()), <span class="number">1_000</span>),
+			<span class="ident">runtime::SudoCall::sudo_unchecked_weight</span> {
+				<span class="ident">call</span>: <span class="ident">Box::new</span>(<span class="ident">call</span>.<span class="ident">into</span>()),
+				<span class="ident">weight</span>: <span class="number">1_000</span>,
+			},
 			<span class="ident">Sr25519Keyring::Alice</span>,
 		)
 		.<span class="kw">await</span>
