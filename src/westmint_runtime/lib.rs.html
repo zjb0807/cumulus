@@ -1167,7 +1167,7 @@
 <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">AssetsForceOrigin</span> <span class="op">=</span> <span class="ident">EnsureRoot</span><span class="op">&lt;</span><span class="ident">AccountId</span><span class="op">&gt;</span>;
 
 <span class="macro">parameter_types!</span> {
-	<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">AssetDeposit</span>: <span class="ident">Balance</span> <span class="op">=</span> <span class="number">100</span> <span class="op">*</span> <span class="ident">UNITS</span>; <span class="comment">// 100 WND deposit to create asset</span>
+	<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">AssetDeposit</span>: <span class="ident">Balance</span> <span class="op">=</span> <span class="number">1</span> <span class="op">*</span> <span class="ident">UNITS</span>; <span class="comment">// 1 WND deposit to create asset</span>
 	<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ApprovalDeposit</span>: <span class="ident">Balance</span> <span class="op">=</span> <span class="ident">EXISTENTIAL_DEPOSIT</span>;
 	<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">AssetsStringLimit</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">50</span>;
 	<span class="doccomment">/// Key = 32 bytes, Value = 36 bytes (32+1+1+1+1)</span>
