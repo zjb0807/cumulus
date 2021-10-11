@@ -966,8 +966,6 @@
 <span id="966">966</span>
 <span id="967">967</span>
 <span id="968">968</span>
-<span id="969">969</span>
-<span id="970">970</span>
 </pre><pre class="rust">
 <span class="comment">// Copyright (C) 2021 Parity Technologies (UK) Ltd.</span>
 <span class="comment">// SPDX-License-Identifier: Apache-2.0</span>
@@ -1002,7 +1000,7 @@
 	<span class="ident">create_runtime_str</span>, <span class="ident">generic</span>, <span class="ident">impl_opaque_keys</span>,
 	<span class="ident">traits</span>::{<span class="ident">AccountIdLookup</span>, <span class="ident">BlakeTwo256</span>, <span class="ident">Block</span> <span class="kw">as</span> <span class="ident">BlockT</span>},
 	<span class="ident">transaction_validity</span>::{<span class="ident">TransactionSource</span>, <span class="ident">TransactionValidity</span>},
-	<span class="ident">ApplyExtrinsicResult</span>, <span class="ident">Perbill</span>,
+	<span class="ident">ApplyExtrinsicResult</span>,
 };
 
 <span class="kw">use</span> <span class="ident">sp_std::prelude</span>::<span class="kw-2">*</span>;
@@ -1571,7 +1569,6 @@
 }
 
 <span class="macro">parameter_types!</span> {
-	<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">DisabledValidatorsThreshold</span>: <span class="ident">Perbill</span> <span class="op">=</span> <span class="ident">Perbill::from_percent</span>(<span class="number">33</span>);
 	<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">Period</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">6</span> <span class="op">*</span> <span class="ident">HOURS</span>;
 	<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">Offset</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">0</span>;
 	<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">MaxAuthorities</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">100_000</span>;
@@ -1588,7 +1585,6 @@
 	<span class="comment">// Essentially just Aura, but lets be pedantic.</span>
 	<span class="kw">type</span> <span class="ident">SessionHandler</span> <span class="op">=</span> <span class="op">&lt;</span><span class="ident">SessionKeys</span> <span class="kw">as</span> <span class="ident">sp_runtime::traits::OpaqueKeys</span><span class="op">&gt;</span><span class="ident">::KeyTypeIdProviders</span>;
 	<span class="kw">type</span> <span class="ident">Keys</span> <span class="op">=</span> <span class="ident">SessionKeys</span>;
-	<span class="kw">type</span> <span class="ident">DisabledValidatorsThreshold</span> <span class="op">=</span> <span class="ident">DisabledValidatorsThreshold</span>;
 	<span class="kw">type</span> <span class="ident">WeightInfo</span> <span class="op">=</span> <span class="ident">weights::pallet_session::WeightInfo</span><span class="op">&lt;</span><span class="ident">Runtime</span><span class="op">&gt;</span>;
 }
 
