@@ -971,6 +971,11 @@
 <span id="971">971</span>
 <span id="972">972</span>
 <span id="973">973</span>
+<span id="974">974</span>
+<span id="975">975</span>
+<span id="976">976</span>
+<span id="977">977</span>
+<span id="978">978</span>
 </pre><pre class="rust">
 <span class="comment">// Copyright (C) 2021 Parity Technologies (UK) Ltd.</span>
 <span class="comment">// SPDX-License-Identifier: Apache-2.0</span>
@@ -1044,12 +1049,13 @@
 <span class="kw">use</span> <span class="ident">polkadot_runtime_common</span>::{<span class="ident">BlockHashCount</span>, <span class="ident">RocksDbWeight</span>, <span class="ident">SlowAdjustingFeeUpdate</span>};
 <span class="kw">use</span> <span class="ident">xcm::latest::prelude</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="ident">xcm_builder</span>::{
-	<span class="ident">AccountId32Aliases</span>, <span class="ident">AllowTopLevelPaidExecutionFrom</span>, <span class="ident">AllowUnpaidExecutionFrom</span>,
-	<span class="ident">AsPrefixedGeneralIndex</span>, <span class="ident">ConvertedConcreteAssetId</span>, <span class="ident">CurrencyAdapter</span>, <span class="ident">EnsureXcmOrigin</span>,
-	<span class="ident">FixedWeightBounds</span>, <span class="ident">FungiblesAdapter</span>, <span class="ident">IsConcrete</span>, <span class="ident">LocationInverter</span>, <span class="ident">NativeAsset</span>,
-	<span class="ident">ParentAsSuperuser</span>, <span class="ident">ParentIsDefault</span>, <span class="ident">RelayChainAsNative</span>, <span class="ident">SiblingParachainAsNative</span>,
-	<span class="ident">SiblingParachainConvertsVia</span>, <span class="ident">SignedAccountId32AsNative</span>, <span class="ident">SignedToAccountId32</span>,
-	<span class="ident">SovereignSignedViaLocation</span>, <span class="ident">TakeWeightCredit</span>, <span class="ident">UsingComponents</span>,
+	<span class="ident">AccountId32Aliases</span>, <span class="ident">AllowKnownQueryResponses</span>, <span class="ident">AllowSubscriptionsFrom</span>,
+	<span class="ident">AllowTopLevelPaidExecutionFrom</span>, <span class="ident">AllowUnpaidExecutionFrom</span>, <span class="ident">AsPrefixedGeneralIndex</span>,
+	<span class="ident">ConvertedConcreteAssetId</span>, <span class="ident">CurrencyAdapter</span>, <span class="ident">EnsureXcmOrigin</span>, <span class="ident">FixedWeightBounds</span>,
+	<span class="ident">FungiblesAdapter</span>, <span class="ident">IsConcrete</span>, <span class="ident">LocationInverter</span>, <span class="ident">NativeAsset</span>, <span class="ident">ParentAsSuperuser</span>,
+	<span class="ident">ParentIsDefault</span>, <span class="ident">RelayChainAsNative</span>, <span class="ident">SiblingParachainAsNative</span>, <span class="ident">SiblingParachainConvertsVia</span>,
+	<span class="ident">SignedAccountId32AsNative</span>, <span class="ident">SignedToAccountId32</span>, <span class="ident">SovereignSignedViaLocation</span>, <span class="ident">TakeWeightCredit</span>,
+	<span class="ident">UsingComponents</span>,
 };
 <span class="kw">use</span> <span class="ident">xcm_executor</span>::{<span class="ident">traits::JustTry</span>, <span class="ident">Config</span>, <span class="ident">XcmExecutor</span>};
 
@@ -1500,6 +1506,10 @@
 	<span class="ident">AllowTopLevelPaidExecutionFrom</span><span class="op">&lt;</span><span class="ident">Everything</span><span class="op">&gt;</span>,
 	<span class="ident">AllowUnpaidExecutionFrom</span><span class="op">&lt;</span><span class="ident">ParentOrParentsPlurality</span><span class="op">&gt;</span>,
 	<span class="comment">// ^^^ Parent &amp; its plurality gets free execution</span>
+	<span class="comment">// Expected responses are OK.</span>
+	<span class="ident">AllowKnownQueryResponses</span><span class="op">&lt;</span><span class="ident">PolkadotXcm</span><span class="op">&gt;</span>,
+	<span class="comment">// Subscriptions for version tracking are OK.</span>
+	<span class="ident">AllowSubscriptionsFrom</span><span class="op">&lt;</span><span class="ident">Everything</span><span class="op">&gt;</span>,
 );
 
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">XcmConfig</span>;
