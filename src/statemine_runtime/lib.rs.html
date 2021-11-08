@@ -1089,7 +1089,7 @@
 	<span class="ident">spec_name</span>: <span class="macro">create_runtime_str!</span>(<span class="string">&quot;statemine&quot;</span>),
 	<span class="ident">impl_name</span>: <span class="macro">create_runtime_str!</span>(<span class="string">&quot;statemine&quot;</span>),
 	<span class="ident">authoring_version</span>: <span class="number">1</span>,
-	<span class="ident">spec_version</span>: <span class="number">5</span>,
+	<span class="ident">spec_version</span>: <span class="number">504</span>,
 	<span class="ident">impl_version</span>: <span class="number">0</span>,
 	<span class="ident">apis</span>: <span class="ident">RUNTIME_API_VERSIONS</span>,
 	<span class="ident">transaction_version</span>: <span class="number">3</span>,
@@ -1605,7 +1605,7 @@
 <span class="doccomment">/// queues.</span>
 <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">XcmRouter</span> <span class="op">=</span> (
 	<span class="comment">// Two routers - use UMP to communicate with the relay chain:</span>
-	<span class="ident">cumulus_primitives_utility::ParentAsUmp</span><span class="op">&lt;</span><span class="ident">ParachainSystem</span>, ()<span class="op">&gt;</span>,
+	<span class="ident">cumulus_primitives_utility::ParentAsUmp</span><span class="op">&lt;</span><span class="ident">ParachainSystem</span>, <span class="ident">PolkadotXcm</span><span class="op">&gt;</span>,
 	<span class="comment">// ..and XCMP to communicate with the sibling chains.</span>
 	<span class="ident">XcmpQueue</span>,
 );
@@ -1637,7 +1637,7 @@
 	<span class="kw">type</span> <span class="ident">Event</span> <span class="op">=</span> <span class="ident">Event</span>;
 	<span class="kw">type</span> <span class="ident">XcmExecutor</span> <span class="op">=</span> <span class="ident">XcmExecutor</span><span class="op">&lt;</span><span class="ident">XcmConfig</span><span class="op">&gt;</span>;
 	<span class="kw">type</span> <span class="ident">ChannelInfo</span> <span class="op">=</span> <span class="ident">ParachainSystem</span>;
-	<span class="kw">type</span> <span class="ident">VersionWrapper</span> <span class="op">=</span> ();
+	<span class="kw">type</span> <span class="ident">VersionWrapper</span> <span class="op">=</span> <span class="ident">PolkadotXcm</span>;
 }
 
 <span class="kw">impl</span> <span class="ident">cumulus_pallet_dmp_queue::Config</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
@@ -1741,7 +1741,7 @@
 
 		<span class="comment">// XCM helpers.</span>
 		<span class="ident">XcmpQueue</span>: <span class="ident">cumulus_pallet_xcmp_queue</span>::{<span class="ident">Pallet</span>, <span class="ident">Call</span>, <span class="ident">Storage</span>, <span class="ident">Event</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>} <span class="op">=</span> <span class="number">30</span>,
-		<span class="ident">PolkadotXcm</span>: <span class="ident">pallet_xcm</span>::{<span class="ident">Pallet</span>, <span class="ident">Call</span>, <span class="ident">Event</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>, <span class="ident">Origin</span>} <span class="op">=</span> <span class="number">31</span>,
+		<span class="ident">PolkadotXcm</span>: <span class="ident">pallet_xcm</span>::{<span class="ident">Pallet</span>, <span class="ident">Call</span>, <span class="ident">Storage</span>, <span class="ident">Event</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>, <span class="ident">Origin</span>} <span class="op">=</span> <span class="number">31</span>,
 		<span class="ident">CumulusXcm</span>: <span class="ident">cumulus_pallet_xcm</span>::{<span class="ident">Pallet</span>, <span class="ident">Event</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>, <span class="ident">Origin</span>} <span class="op">=</span> <span class="number">32</span>,
 		<span class="ident">DmpQueue</span>: <span class="ident">cumulus_pallet_dmp_queue</span>::{<span class="ident">Pallet</span>, <span class="ident">Call</span>, <span class="ident">Storage</span>, <span class="ident">Event</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>} <span class="op">=</span> <span class="number">33</span>,
 
