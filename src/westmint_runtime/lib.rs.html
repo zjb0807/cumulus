@@ -985,6 +985,7 @@
 <span id="985">985</span>
 <span id="986">986</span>
 <span id="987">987</span>
+<span id="988">988</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (C) 2021 Parity Technologies (UK) Ltd.</span>
 <span class="comment">// SPDX-License-Identifier: Apache-2.0</span>
 
@@ -1497,7 +1498,8 @@
 );
 
 <span class="macro">parameter_types!</span> {
-	<span class="kw">pub</span> <span class="ident">UnitWeightCost</span>: <span class="ident">Weight</span> <span class="op">=</span> <span class="number">1_000</span>;
+	<span class="comment">// One XCM operation is 1_000_000_000 weight - almost certainly a conservative estimate.</span>
+	<span class="kw">pub</span> <span class="ident">UnitWeightCost</span>: <span class="ident">Weight</span> <span class="op">=</span> <span class="number">1_000_000_000</span>;
 	<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">MaxInstructions</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">100</span>;
 }
 
