@@ -1321,7 +1321,7 @@
 	<span class="ident">AssetOwner</span>,
 	<span class="doccomment">/// Asset manager. Can execute calls related to asset management.</span>
 	<span class="ident">AssetManager</span>,
-	<span class="comment">// Collator selection proxy. Can execute calls related to collator selection mechanism.</span>
+	<span class="doccomment">/// Collator selection proxy. Can execute calls related to collator selection mechanism.</span>
 	<span class="ident">Collator</span>,
 }
 <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">ProxyType</span> {
@@ -1504,7 +1504,7 @@
 	<span class="comment">// using `LocationToAccountId` and then turn that into the usual `Signed` origin. Useful for</span>
 	<span class="comment">// foreign chains who want to have a local sovereign account on this chain which they control.</span>
 	<span class="ident">SovereignSignedViaLocation</span><span class="op">&lt;</span><span class="ident">LocationToAccountId</span>, <span class="ident">Origin</span><span class="op">&gt;</span>,
-	<span class="comment">// Native converter for Relay-chain (Parent) location; will converts to a `Relay` origin when</span>
+	<span class="comment">// Native converter for Relay-chain (Parent) location; will convert to a `Relay` origin when</span>
 	<span class="comment">// recognised.</span>
 	<span class="ident">RelayChainAsNative</span><span class="op">&lt;</span><span class="ident">RelayChainOrigin</span>, <span class="ident">Origin</span><span class="op">&gt;</span>,
 	<span class="comment">// Native converter for sibling Parachains; will convert to a `SiblingPara` origin when</span>
@@ -1542,8 +1542,8 @@
 <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">Barrier</span> <span class="op">=</span> (
 	<span class="ident">TakeWeightCredit</span>,
 	<span class="ident">AllowTopLevelPaidExecutionFrom</span><span class="op">&lt;</span><span class="ident">Everything</span><span class="op">&gt;</span>,
+	<span class="comment">// Parent and its exec plurality get free execution</span>
 	<span class="ident">AllowUnpaidExecutionFrom</span><span class="op">&lt;</span><span class="ident">ParentOrParentsExecutivePlurality</span><span class="op">&gt;</span>,
-	<span class="comment">// ^^^ Parent and its exec plurality get free execution</span>
 	<span class="comment">// Expected responses are OK.</span>
 	<span class="ident">AllowKnownQueryResponses</span><span class="op">&lt;</span><span class="ident">PolkadotXcm</span><span class="op">&gt;</span>,
 	<span class="comment">// Subscriptions for version tracking are OK.</span>
