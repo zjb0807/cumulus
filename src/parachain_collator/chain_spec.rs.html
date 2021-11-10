@@ -272,7 +272,7 @@
 	<span class="ident">parachain_template_runtime::SessionKeys</span> { <span class="ident">aura</span>: <span class="ident">keys</span> }
 }
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">development_config</span>(<span class="ident">id</span>: <span class="ident">ParaId</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ChainSpec</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">development_config</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ChainSpec</span> {
 	<span class="comment">// Give your base currency a unit name and decimal places</span>
 	<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">properties</span> <span class="op">=</span> <span class="ident">sc_chain_spec::Properties::new</span>();
 	<span class="ident">properties</span>.<span class="ident">insert</span>(<span class="string">&quot;tokenSymbol&quot;</span>.<span class="ident">into</span>(), <span class="string">&quot;ROC&quot;</span>.<span class="ident">into</span>());
@@ -312,7 +312,7 @@
 					<span class="ident">get_account_id_from_seed</span>::<span class="op">&lt;</span><span class="ident">sr25519::Public</span><span class="op">&gt;</span>(<span class="string">&quot;Eve//stash&quot;</span>),
 					<span class="ident">get_account_id_from_seed</span>::<span class="op">&lt;</span><span class="ident">sr25519::Public</span><span class="op">&gt;</span>(<span class="string">&quot;Ferdie//stash&quot;</span>),
 				],
-				<span class="ident">id</span>,
+				<span class="number">1000</span>.<span class="ident">into</span>(),
 			)
 		},
 		<span class="macro">vec!</span>[],
@@ -321,12 +321,12 @@
 		<span class="prelude-val">None</span>,
 		<span class="ident">Extensions</span> {
 			<span class="ident">relay_chain</span>: <span class="string">&quot;rococo-local&quot;</span>.<span class="ident">into</span>(), <span class="comment">// You MUST set this to the correct network!</span>
-			<span class="ident">para_id</span>: <span class="ident">id</span>.<span class="ident">into</span>(),
+			<span class="ident">para_id</span>: <span class="number">1000</span>,
 		},
 	)
 }
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">local_testnet_config</span>(<span class="ident">id</span>: <span class="ident">ParaId</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ChainSpec</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">local_testnet_config</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ChainSpec</span> {
 	<span class="comment">// Give your base currency a unit name and decimal places</span>
 	<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">properties</span> <span class="op">=</span> <span class="ident">sc_chain_spec::Properties::new</span>();
 	<span class="ident">properties</span>.<span class="ident">insert</span>(<span class="string">&quot;tokenSymbol&quot;</span>.<span class="ident">into</span>(), <span class="string">&quot;ROC&quot;</span>.<span class="ident">into</span>());
@@ -366,7 +366,7 @@
 					<span class="ident">get_account_id_from_seed</span>::<span class="op">&lt;</span><span class="ident">sr25519::Public</span><span class="op">&gt;</span>(<span class="string">&quot;Eve//stash&quot;</span>),
 					<span class="ident">get_account_id_from_seed</span>::<span class="op">&lt;</span><span class="ident">sr25519::Public</span><span class="op">&gt;</span>(<span class="string">&quot;Ferdie//stash&quot;</span>),
 				],
-				<span class="ident">id</span>,
+				<span class="number">1000</span>.<span class="ident">into</span>(),
 			)
 		},
 		<span class="comment">// Bootnodes</span>
@@ -380,7 +380,7 @@
 		<span class="comment">// Extensions</span>
 		<span class="ident">Extensions</span> {
 			<span class="ident">relay_chain</span>: <span class="string">&quot;rococo-local&quot;</span>.<span class="ident">into</span>(), <span class="comment">// You MUST set this to the correct network!</span>
-			<span class="ident">para_id</span>: <span class="ident">id</span>.<span class="ident">into</span>(),
+			<span class="ident">para_id</span>: <span class="number">1000</span>,
 		},
 	)
 }
