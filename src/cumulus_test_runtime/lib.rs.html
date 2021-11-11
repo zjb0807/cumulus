@@ -465,6 +465,12 @@
 <span id="465">465</span>
 <span id="466">466</span>
 <span id="467">467</span>
+<span id="468">468</span>
+<span id="469">469</span>
+<span id="470">470</span>
+<span id="471">471</span>
+<span id="472">472</span>
+<span id="473">473</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright 2019-2021 Parity Technologies (UK) Ltd.</span>
 <span class="comment">// This file is part of Cumulus.</span>
 
@@ -835,6 +841,12 @@
 	<span class="kw">impl</span> <span class="ident">sp_api::Metadata</span><span class="op">&lt;</span><span class="ident">Block</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
 		<span class="kw">fn</span> <span class="ident">metadata</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">OpaqueMetadata</span> {
 			<span class="ident">OpaqueMetadata::new</span>(<span class="ident">Runtime::metadata</span>().<span class="ident">into</span>())
+		}
+	}
+
+	<span class="kw">impl</span> <span class="ident">frame_system_rpc_runtime_api::AccountNonceApi</span><span class="op">&lt;</span><span class="ident">Block</span>, <span class="ident">AccountId</span>, <span class="ident">Index</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Runtime</span> {
+		<span class="kw">fn</span> <span class="ident">account_nonce</span>(<span class="ident">account</span>: <span class="ident">AccountId</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Index</span> {
+			<span class="ident">System::account_nonce</span>(<span class="ident">account</span>)
 		}
 	}
 
