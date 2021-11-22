@@ -30,6 +30,7 @@ use cumulus_client_service::{
 use cumulus_primitives_core::ParaId;
 use cumulus_test_runtime::{Hash, Header, NodeBlock as Block, RuntimeApi};
 use frame_system_rpc_runtime_api::AccountNonceApi;
+use jsonrpsee::{types::v2::Response as RpcResponse, RpcModule};
 use polkadot_primitives::v1::{CollatorPair, Hash as PHash, PersistedValidationData};
 use polkadot_service::ProvideRuntimeApi;
 use sc_client_api::execution_extensions::ExecutionStrategies;
@@ -50,9 +51,7 @@ use sp_runtime::{codec::Encode, generic, traits::BlakeTwo256};
 use sp_state_machine::BasicExternalities;
 use sp_trie::PrefixedMemoryDB;
 use std::sync::Arc;
-use substrate_test_client::{
-	BlockchainEventsExt, RpcHandlersExt, RpcTransactionError, RpcTransactionOutput,
-};
+use substrate_test_client::BlockchainEventsExt;
 
 pub use chain_spec::*;
 pub use cumulus_test_runtime as runtime;
@@ -182,9 +181,7 @@ async fn start_node_impl<RB>(
 	TransactionPool,
 )>
 where
-	RB: Fn(Arc<Client>) -> Result<jsonrpc_core::IoHandler<sc_rpc::Metadata>, sc_service::Error>
-		+ Send
-		+ 'static,
+	RB: Fn(Arc<Client>) -> Result<RpcModule<()>, sc_service::Error> + Send + 'static,
 {
 	if matches!(parachain_config.role, Role::Light) {
 		return Err("Light client not supported!".into())
@@ -235,16 +232,16 @@ where
 			warp_sync: None,
 		})?;
 
-	let rpc_extensions_builder = {
+	let rpc_builder = {
 		let client = client.clone();
 
 		Box::new(move |_, _| rpc_ext_builder(client.clone()))
 	};
 
 	let rpc_handlers = sc_service::spawn_tasks(sc_service::SpawnTasksParams {
-		rpc_extensions_builder,
 		client: client.clone(),
 		transaction_pool: transaction_pool.clone(),
+		rpc_builder,
 		task_manager: &mut task_manager,
 		config: parachain_config,
 		keystore: params.keystore_container.sync_keystore(),
@@ -530,7 +527,7 @@ impl TestNodeBuilder {
 			relay_chain_config,
 			self.para_id,
 			self.wrap_announce_block,
-			|_| Ok(Default::default()),
+			|_| Ok(RpcModule::new(())),
 			self.consensus,
 		)
 		.await
@@ -653,24 +650,30 @@ impl TestNode {
 	/// Send an extrinsic to this node.
 	pub async fn send_extrinsic(
 		&self,
-		function: impl Into<runtime::Call>,
+		call: impl Into<runtime::Call>,
 		caller: Sr25519Keyring,
-	) -> Result<RpcTransactionOutput, RpcTransactionError> {
-		let extrinsic = construct_extrinsic(&*self.client, function, caller.pair(), Some(0));
+	) -> Result<String, serde_json::Error> {
+		let extrinsic = construct_extrinsic(&*self.client, call, caller.pair(), Some(0));
+		let payload = hex::encode(extrinsic.encode());
+		let rpc = self
+			.rpc_handlers
+			.rpc_query("author_submitExtrinsic", vec![payload])
+			.await
+			.expect("in-memory rpc calls work");
 
-		self.rpc_handlers.send_transaction(extrinsic.into()).await
+		serde_json::from_str::<RpcResponse<String>>(&rpc).map(|result| result.result)
 	}
 
 	/// Register a parachain at this relay chain.
-	pub async fn schedule_upgrade(&self, validation: Vec<u8>) -> Result<(), RpcTransactionError> {
+	pub async fn schedule_upgrade(&self, validation: Vec<u8>) -> Result<(), serde_json::Error> {
 		let call = frame_system::Call::set_code { code: validation };
 
 		self.send_extrinsic(
 			runtime::SudoCall::sudo_unchecked_weight { call: Box::new(call.into()), weight: 1_000 },
 			Sr25519Keyring::Alice,
 		)
-		.await
-		.map(drop)
+		.await?;
+		Ok(())
 	}
 }
 

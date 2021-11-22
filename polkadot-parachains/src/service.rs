@@ -34,6 +34,7 @@ pub use parachains_common::{AccountId, Balance, Block, Hash, Header, Index as No
 
 use cumulus_client_consensus_relay_chain::Verifier as RelayChainVerifier;
 use futures::lock::Mutex;
+use jsonrpsee::RpcModule;
 use sc_client_api::ExecutorProvider;
 use sc_consensus::{
 	import_queue::{BasicQueue, Verifier as VerifierT},
@@ -275,7 +276,7 @@ where
 	Executor: sc_executor::NativeExecutionDispatch + 'static,
 	RB: Fn(
 			Arc<TFullClient<Block, RuntimeApi, NativeElseWasmExecutor<Executor>>>,
-		) -> Result<jsonrpc_core::IoHandler<sc_rpc::Metadata>, sc_service::Error>
+		) -> Result<RpcModule<()>, sc_service::Error>
 		+ Send
 		+ 'static,
 	BIQ: FnOnce(
@@ -350,12 +351,12 @@ where
 		})?;
 
 	let rpc_client = client.clone();
-	let rpc_extensions_builder = Box::new(move |_, _| rpc_ext_builder(rpc_client.clone()));
+	let rpc_builder = Box::new(move |_, _| rpc_ext_builder(rpc_client.clone()));
 
 	sc_service::spawn_tasks(sc_service::SpawnTasksParams {
-		rpc_extensions_builder,
 		client: client.clone(),
 		transaction_pool: transaction_pool.clone(),
+		rpc_builder,
 		task_manager: &mut task_manager,
 		config: parachain_config,
 		keystore: params.keystore_container.sync_keystore(),
@@ -450,7 +451,7 @@ where
 	Executor: sc_executor::NativeExecutionDispatch + 'static,
 	RB: Fn(
 			Arc<TFullClient<Block, RuntimeApi, Executor>>,
-		) -> Result<jsonrpc_core::IoHandler<sc_rpc::Metadata>, sc_service::Error>
+		) -> Result<RpcModule<()>, sc_service::Error>
 		+ Send
 		+ 'static,
 	BIQ: FnOnce(
@@ -524,7 +525,7 @@ where
 			warp_sync: None,
 		})?;
 
-	let rpc_extensions_builder = {
+	let rpc_builder = {
 		let client = client.clone();
 		let transaction_pool = transaction_pool.clone();
 
@@ -535,14 +536,14 @@ where
 				deny_unsafe,
 			};
 
-			Ok(rpc::create_full(deps))
+			rpc::create_full(deps).map_err(Into::into)
 		})
 	};
 
 	sc_service::spawn_tasks(sc_service::SpawnTasksParams {
-		rpc_extensions_builder,
 		client: client.clone(),
 		transaction_pool: transaction_pool.clone(),
+		rpc_builder,
 		task_manager: &mut task_manager,
 		config: parachain_config,
 		keystore: params.keystore_container.sync_keystore(),
@@ -676,7 +677,7 @@ pub async fn start_rococo_parachain_node(
 		parachain_config,
 		polkadot_config,
 		id,
-		|_| Ok(Default::default()),
+		|_| Ok(RpcModule::new(())),
 		rococo_parachain_build_import_queue,
 		|client,
 		 prometheus_registry,
@@ -798,7 +799,7 @@ pub async fn start_shell_node(
 		parachain_config,
 		polkadot_config,
 		id,
-		|_| Ok(Default::default()),
+		|_| Ok(RpcModule::new(())),
 		shell_build_import_queue,
 		|client,
 		 prometheus_registry,
@@ -1068,7 +1069,7 @@ where
 		parachain_config,
 		polkadot_config,
 		id,
-		|_| Ok(Default::default()),
+		|_| Ok(RpcModule::new(())),
 		statemint_build_import_queue,
 		|client,
 		 prometheus_registry,
