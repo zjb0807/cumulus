@@ -20,7 +20,7 @@ async-trait = "0.1.42"
 jsonrpsee = { git = "https://github.com/paritytech/jsonrpsee", rev = "9a3c1e981bcdbbb558b1457bbd78277a14dca2da", features = ["server"] }
 
 # Parachain runtimes
-rococo-parachain-runtime = { package = "rococo-runtime", path = "rococo" }
+rococo-parachain-runtime = { path = "rococo-parachain" }
 shell-runtime = { path = "shell" }
 statemint-runtime = { path = "statemint" }
 statemine-runtime = { path = "statemine" }
