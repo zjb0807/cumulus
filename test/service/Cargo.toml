@@ -58,7 +58,7 @@ cumulus-test-relay-validation-worker-provider = { path = "../relay-validation-wo
 criterion = { version = "0.3.5", features = [ "async_tokio" ] }
 
 # RPC related dependencies
-jsonrpsee = { git = "https://github.com/paritytech/jsonrpsee", rev = "9a3c1e981bcdbbb558b1457bbd78277a14dca2da", features = ["server"] }
+jsonrpsee = { version = "0.5", features = ["server"] }
 
 [dev-dependencies]
 futures = "0.3.5"
