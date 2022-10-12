@@ -961,19 +961,34 @@ dependencies = [
 
 [[package]]
 name = "clap"
-version = "3.2.20"
+version = "3.2.22"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "23b71c3ce99b7611011217b366d923f1d0a7e07a92bb2dbf1e84508c673ca3bd"
+checksum = "86447ad904c7fb335a790c9d7fe3d0d971dc523b8ccd1561a520de9a85302750"
 dependencies = [
  "atty",
  "bitflags",
- "clap_derive",
- "clap_lex",
+ "clap_derive 3.2.18",
+ "clap_lex 0.2.2",
  "indexmap",
  "once_cell",
  "strsim",
  "termcolor",
- "textwrap 0.15.0",
+ "textwrap 0.15.1",
+]
+
+[[package]]
+name = "clap"
+version = "4.0.13"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "69d64e88428747154bd8bc378d178377ef4dace7a5735ca1f3855be72f2c2cb5"
+dependencies = [
+ "atty",
+ "bitflags",
+ "clap_derive 4.0.13",
+ "clap_lex 0.3.0",
+ "once_cell",
+ "strsim",
+ "termcolor",
 ]
 
 [[package]]
@@ -990,10 +1005,32 @@ dependencies = [
 ]
 
 [[package]]
+name = "clap_derive"
+version = "4.0.13"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c42f169caba89a7d512b5418b09864543eeb4d497416c917d7137863bd2076ad"
+dependencies = [
+ "heck",
+ "proc-macro-error",
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
 name = "clap_lex"
 version = "0.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5538cd660450ebeb4234cfecf8f2284b844ffc4c50531e66d584ad5b91293613"
+dependencies = [
+ "os_str_bytes",
+]
+
+[[package]]
+name = "clap_lex"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0d4198f73e42b4936b35b5bb248d81d2b595ecb170da0bac7655c54eedfa8da8"
 dependencies = [
  "os_str_bytes",
 ]
@@ -1532,7 +1569,7 @@ dependencies = [
 name = "cumulus-client-cli"
 version = "0.1.0"
 dependencies = [
- "clap 3.2.20",
+ "clap 4.0.13",
  "parity-scale-codec",
  "sc-chain-spec",
  "sc-cli",
@@ -2146,7 +2183,7 @@ name = "cumulus-test-service"
 version = "0.1.0"
 dependencies = [
  "async-trait",
- "clap 3.2.20",
+ "clap 4.0.13",
  "criterion",
  "cumulus-client-cli",
  "cumulus-client-consensus-common",
@@ -2831,7 +2868,7 @@ source = "git+https://github.com/paritytech/substrate?branch=master#26193945883c
 dependencies = [
  "Inflector",
  "chrono",
- "clap 3.2.20",
+ "clap 3.2.22",
  "comfy-table",
  "frame-benchmarking",
  "frame-support",
@@ -6464,7 +6501,7 @@ dependencies = [
 name = "parachain-template-node"
 version = "0.1.0"
 dependencies = [
- "clap 3.2.20",
+ "clap 4.0.13",
  "cumulus-client-cli",
  "cumulus-client-collator",
  "cumulus-client-consensus-aura",
@@ -7067,7 +7104,7 @@ name = "polkadot-cli"
 version = "0.9.28"
 source = "git+https://github.com/paritytech/polkadot?branch=master#850d1f5a819de5a9bf52a149ffd8b7d584ba1076"
 dependencies = [
- "clap 3.2.20",
+ "clap 3.2.22",
  "frame-benchmarking-cli",
  "futures",
  "log",
@@ -7724,7 +7761,7 @@ version = "0.9.230"
 dependencies = [
  "assert_cmd",
  "async-trait",
- "clap 3.2.20",
+ "clap 4.0.13",
  "collectives-polkadot-runtime",
  "contracts-rococo-runtime",
  "cumulus-client-cli",
@@ -9377,7 +9414,7 @@ version = "0.10.0-dev"
 source = "git+https://github.com/paritytech/substrate?branch=master#26193945883c773f2f14f976da3c3bd11dc0eb79"
 dependencies = [
  "chrono",
- "clap 3.2.20",
+ "clap 3.2.22",
  "fdlimit",
  "futures",
  "hex",
@@ -12003,9 +12040,9 @@ dependencies = [
 
 [[package]]
 name = "textwrap"
-version = "0.15.0"
+version = "0.15.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b1141d4d61095b28419e22cb0bbf02755f5e54e0526f97f1e3d1d160e60885fb"
+checksum = "949517c0cf1bf4ee812e2e07e08ab448e3ae0d23472aee8a06c985f0c8815b16"
 
 [[package]]
 name = "thiserror"
@@ -12413,7 +12450,7 @@ name = "try-runtime-cli"
 version = "0.10.0-dev"
 source = "git+https://github.com/paritytech/substrate?branch=master#26193945883c773f2f14f976da3c3bd11dc0eb79"
 dependencies = [
- "clap 3.2.20",
+ "clap 3.2.22",
  "frame-try-runtime",
  "jsonrpsee",
  "log",
